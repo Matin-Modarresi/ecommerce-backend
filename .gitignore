@@ -1,0 +1,70 @@
+### --- Python Core --- ###
+# بایت‌کدهای پایتون که سرعت اجرا را بالا می‌برند اما نیازی به نسخه برداری ندارند
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+### --- Virtual Environments --- ###
+# محیط‌های مجازی نباید کامیت شوند چون وابسته به سیستم‌عامل هستند
+.venv/
+venv/
+env/
+ENV/
+bin/
+lib/
+include/
+share/
+
+### --- Django Specifics --- ###
+# دیتابیس محلی (فقط برای توسعه است و نباید به سرور یا بقیه منتقل شود)
+db.sqlite3
+db.sqlite3-journal
+
+# فایل‌های آپلودی توسط کاربران (Media)
+# نباید حجم مخزن را با عکس‌ها و ویدیوهای تستی پر کرد
+media/
+
+# فایل‌های استاتیک جمع‌آوری شده (پس از اجرای collectstatic)
+static/
+staticfiles/
+
+### --- Sensitive Information (CRITICAL) --- ###
+# فایل‌های تنظیمات محیطی که حاوی SECRET_KEY و پسورد دیتابیس هستند
+.env
+.env.local
+.env.prod
+.env.dev
+local_settings.py
+
+### --- Logs & Debugging --- ###
+# لاگ‌های سیستم و ارورها
+*.log
+pip-log.txt
+pip-delete-this-directory.txt
+
+### --- Unit Tests & Coverage --- ###
+# نتایج تست‌ها و گزارش‌های پوشش کد
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+htmlcov/
+.pytest_cache/
+
+### --- IDEs & Editors --- ###
+# تنظیمات شخصی ویرایشگرها
+.vscode/
+.idea/
+*.swp
+*.swo
+.project
+.pydevproject
+.settings/
+
+### --- OS Specific --- ###
+.DS_Store
+Thumbs.db
