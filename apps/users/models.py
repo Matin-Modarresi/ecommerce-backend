@@ -22,6 +22,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
+    @property
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}".strip()
+
     def __str__(self):
         return self.email
 
