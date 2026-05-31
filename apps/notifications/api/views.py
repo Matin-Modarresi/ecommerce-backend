@@ -8,6 +8,7 @@ from apps.notifications.api.serializers import (
     NotificationSerializer,
 )
 from apps.notifications.models import Notification
+from apps.core.permissions import IsOwner, IsOwnerOrStaff
 
 
 class NotificationViewSet(viewsets.ModelViewSet):
@@ -15,6 +16,18 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Notification.objects.filter(user=self.request.user).order_by("-created_at")
+
+    def get_permissions(self):
+        # retrieve -> فقط مالک یا ادمین
+        if self.action == "retrieve":
+            return [permissions.IsAuthenticated(), IsOwnerOrStaff()]
+
+        # mark as read -> فقط مالک (حتی ادمین هم اگر مالک نباشد ممنوع)
+        if self.action == "mark_as_read":
+            return [permissions.IsAuthenticated(), IsOwner()]
+
+        # سایر اکشن‌ها (list, mark_all_as_read, create, ...)
+        return [permissions.IsAuthenticated()]
 
     def get_serializer_class(self):
         if self.action == "create":
