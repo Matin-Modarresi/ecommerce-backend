@@ -29,3 +29,27 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
         read_only_fields = ['id', 'average_rating', 'review_count', 'slug']
+
+
+class ProductCreateUpdateSerializer(serializers.ModelSerializer):
+    """
+    سریالایزر مخصوص ایجاد و ویرایش محصول.
+    فیلدهای محاسباتی و خودکار در اینجا read_only هستند.
+    """
+
+    class Meta:
+        model = Product
+        fields = [
+            'id', 'category', 'name', 'description',
+            'price', 'stock_quantity', 'is_active'
+        ]
+
+    def validate_price(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("قیمت محصول باید بیشتر از صفر باشد.")
+        return value
+
+    def validate_stock_quantity(self, value):
+        if value < 0:
+            raise serializers.ValidationError("موجودی انبار نمی‌تواند عدد منفی باشد.")
+        return value
