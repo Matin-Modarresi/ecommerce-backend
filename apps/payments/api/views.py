@@ -13,7 +13,10 @@ class PaymentListView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        payments = Payment.objects.select_related("order").filter(order__user=request.user)
+        if request.user.is_staff or request.user.is_superuser:
+            payments = Payment.objects.select_related("order").all()
+        else:
+            payments = Payment.objects.select_related("order").filter(order__user=request.user)
         serializer = PaymentSerializer(payments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -23,13 +26,14 @@ class PaymentDetailView(APIView):
 
     def get(self, request, pk, *args, **kwargs):
         try:
-            payment = Payment.objects.select_related("order").get(pk=pk, order__user=request.user)
+            payment = Payment.objects.select_related("order").get(pk=pk)
         except Payment.DoesNotExist:
             return Response(
                 {"detail": "Payment not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+        self.check_object_permissions(request, payment)
         serializer = PaymentSerializer(payment)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
